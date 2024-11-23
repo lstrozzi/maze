@@ -15,6 +15,12 @@ for (let i = 0; i < N; i++) {
   }
 }
 
+// draw a cell
+const drawCell = (i, j, color) => {
+  ctx.fillStyle = color;
+  ctx.fillRect(j * w + 1, i * h + 1, w-2, h-2);
+};
+
 // draw the board
 const drawBoard = () => {
   ctx.fillStyle = 'sepia';
@@ -22,11 +28,9 @@ const drawBoard = () => {
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
       if (maze[i][j] === 1) {
-        ctx.fillStyle = 'darkgrey';
-        ctx.fillRect(j * w + 1, i * h + 1, w-2, h-2);
+        drawCell(i, j, 'darkgrey');
       } else {
-        ctx.fillStyle = 'darkgreen';
-        ctx.fillRect(j *w + 1, i * h + 1, w-2, h-2);
+        drawCell(i, j, 'darkgreen');
       }
     }
   }
