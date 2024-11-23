@@ -46,37 +46,45 @@ const generateMaze = (i, j) => {
 
   // random direction
   rand = Math.floor(Math.random() * 4);
+  dist = Math.floor(Math.random() * 8) + 1;
   [dx, dy] = directions[rand];
   initial_rand = rand;
   blocked = false;
 
+  ni = i + dx;
+  nj = j + dy;
   while (!blocked) {
-    const ni = i + dx;
-    const nj = j + dy;
-    if (ni > 0 && ni < N && nj > 0 && nj < N &&
-       (((dx != 0) &&
+    if (ni > 1 && ni < N-1 && nj > 1 && nj < N-1 &&
+       ((dx != 0 &&
         maze[ni][nj] === 0 &&
         maze[ni][nj-1] === 0 &&
         maze[ni][nj+1] === 0 &&
         maze[ni+dx][nj+dy] === 0 &&
         maze[ni+dx][nj+dy-1] === 0 &&
         maze[ni+dx][nj+dy+1] === 0) ||
-       ((dy != 0) && 
+       (dy != 0 && 
         maze[ni][nj] === 0 &&
         maze[ni-1][nj] === 0 &&
         maze[ni+1][nj] === 0 &&
         maze[ni+dx][nj+dy] === 0 &&
         maze[ni+dx-1][nj+dy] === 0 &&
-        maze[ni+dx+1][nj+dy] === 0)))
-      {
-      maze[i + dx][j + dy] = 1;
-      drawCell(i + dx, j + dy, 'white');
-      sleep(100).then(() => {
+        maze[ni+dx+1][nj+dy] === 0) )) {
+      maze[ni][nj] = 1;
+      drawCell(ni, nj, 'white');
+      sleep(100);
+      dist --;
+      if (dist <= 0) {
         generateMaze(ni, nj);
-      });
+      } else {
+        ni = ni + dx;
+        nj = nj + dy;
+      }
     } else {
+      drawCell(ni, nj, 'red');
       rand = (rand + 1) % 4;
       [dx, dy] = directions[rand];
+      ni = i + dx;
+      nj = j + dy;
       if (rand == initial_rand) {
         blocked = true;
       }
@@ -85,7 +93,8 @@ const generateMaze = (i, j) => {
 };
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-generateMaze(1, 1);
+generateMaze(
+  1 + Math.floor(Math.random()*(N-2)),
+  1 + Math.floor(Math.random()*(N-2)));
