@@ -54,10 +54,21 @@ const generateMaze = (i, j) => {
     const ni = i + dx;
     const nj = j + dy;
     if (ni > 0 && ni < N && nj > 0 && nj < N &&
-       maze[ni][nj] === 0 &&
-       maze[ni+dx][nj+dy] === 0 &&
-       maze[ni+dy][nj] === 0 &&
-       maze[ni][nj+dx] === 0) {
+       (((dx != 0) &&
+        maze[ni][nj] === 0 &&
+        maze[ni][nj-1] === 0 &&
+        maze[ni][nj+1] === 0 &&
+        maze[ni+dx][nj+dy] === 0 &&
+        maze[ni+dx][nj+dy-1] === 0 &&
+        maze[ni+dx][nj+dy+1] === 0) ||
+       ((dy != 0) && 
+        maze[ni][nj] === 0 &&
+        maze[ni-1][nj] === 0 &&
+        maze[ni+1][nj] === 0 &&
+        maze[ni+dx][nj+dy] === 0 &&
+        maze[ni+dx-1][nj+dy] === 0 &&
+        maze[ni+dx+1][nj+dy] === 0)))
+      {
       maze[i + dx][j + dy] = 1;
       drawCell(i + dx, j + dy, 'white');
       sleep(100).then(() => {
