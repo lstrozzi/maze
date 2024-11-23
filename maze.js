@@ -38,3 +38,43 @@ const drawBoard = () => {
 
 // start
 drawBoard();
+
+// generate the maze
+const generateMaze = (i, j) => {
+  maze[i][j] = 1;
+  const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+
+  // random direction
+  rand = Math.floor(Math.random() * 4);
+  [dx, dy] = directions[rand];
+  initial_rand = rand;
+  blocked = false;
+
+  while (!blocked) {
+    const ni = i + dx;
+    const nj = j + dy;
+    if (ni > 0 && ni < N && nj > 0 && nj < N &&
+       maze[ni][nj] === 0 &&
+       maze[ni+dx][nj+dy] === 0 &&
+       maze[ni+dy][nj] === 0 &&
+       maze[ni][nj+dx] === 0) {
+      maze[i + dx][j + dy] = 1;
+      drawCell(i + dx, j + dy, 'white');
+      sleep(100).then(() => {
+        generateMaze(ni, nj);
+      });
+    } else {
+      rand = (rand + 1) % 4;
+      [dx, dy] = directions[rand];
+      if (rand == initial_rand) {
+        blocked = true;
+      }
+    }
+  }
+};
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+generateMaze(1, 1);
